@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>AR.js Basic Example with Animation and Visibility Control</title>
+  <title>AR.js Basic Example with Animation</title>
   <meta charset="utf-8">
   <style>
     body { margin: 0; }
@@ -29,32 +29,5 @@
     <!-- Define a câmera -->
     <a-entity camera></a-entity>
   </a-scene>
-
-  <script>
-    var marker = document.querySelector('a-marker');
-    var model = document.getElementById('arduino-model');
-    var markerVisible = false;
-    var visibilityTimeout;
-
-    // Função para manter o modelo visível por um período após a perda do marcador
-    function keepModelVisible() {
-      clearTimeout(visibilityTimeout); // Limpa o timeout anterior
-      model.setAttribute('visible', 'true'); // Torna o modelo visível
-      visibilityTimeout = setTimeout(function() {
-        model.setAttribute('visible', 'false'); // Esconde o modelo após o tempo
-      }, 2000); // 2 segundos de atraso
-    }
-
-    marker.addEventListener('markerFound', function() {
-      markerVisible = true;
-      model.setAttribute('visible', 'true');
-      clearTimeout(visibilityTimeout); // Limpa qualquer timeout de visibilidade quando o marcador é encontrado
-    });
-
-    marker.addEventListener('markerLost', function() {
-      markerVisible = false;
-      keepModelVisible(); // Chama a função para manter o modelo visível
-    });
-  </script>
 </body>
 </html>
