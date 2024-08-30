@@ -17,14 +17,16 @@
   <a-scene embedded arjs>
     <!-- Define um marcador Hiro com emissão de eventos -->
     <a-marker preset="hiro" emitevents="true">
-      <!-- Modelo 3D com tamanho menor e rotação suave -->
+      <!-- Modelo 3D com tamanho ajustado e rotação suave -->
       <a-entity 
         id="arduino-model"
         gltf-model="url(arduino_uno.glb)" 
         scale="1.5 1.5 1.5" 
         position="0 0 0" 
         rotation="0 0 0"
-        animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+        animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"
+        animation__fade="property: opacity; from: 0; to: 1; dur: 500; startEvents: markerFound"
+        animation__fadeout="property: opacity; from: 1; to: 0; dur: 1000; startEvents: hideModel">
       </a-entity>
     </a-marker>
     <!-- Define a câmera -->
@@ -32,19 +34,19 @@
   </a-scene>
 
   <script>
-    // Manipuladores de eventos para manter o modelo visível mesmo quando o marcador é perdido
     var marker = document.querySelector('a-marker');
     var model = document.getElementById('arduino-model');
     var hideTimeout;
 
     marker.addEventListener('markerLost', function() {
       hideTimeout = setTimeout(function() {
-        model.setAttribute('visible', 'false');
-      }, 1000); // 1000 ms = 1 segundo de atraso
+        model.emit('hideModel'); // Aciona a animação de fade out
+      }, 2000); // 2000 ms = 2 segundos de atraso
     });
 
     marker.addEventListener('markerFound', function() {
       clearTimeout(hideTimeout); // Cancela o esconder do modelo
+      model.emit('markerFound'); // Aciona a animação de fade in
       model.setAttribute('visible', 'true');
     });
   </script>
