@@ -16,15 +16,14 @@
   <!-- Define a cena AR -->
   <a-scene embedded arjs>
     <!-- Define um marcador Hiro -->
-    <a-marker preset="hiro" emitevents="true">
-      <!-- Modelo 3D com tamanho ajustado e rotação suave -->
+    <a-marker preset="hiro">
+      <!-- Modelo 3D com tamanho ajustado -->
       <a-entity 
         id="arduino-model"
         gltf-model="url(arduino_uno.glb)" 
         scale="2.5 2.5 2.5" 
         position="0 0 0" 
-        rotation="0 0 0"
-        animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+        rotation="0 0 0">
       </a-entity>
     </a-marker>
     <!-- Define a câmera -->
@@ -32,29 +31,16 @@
   </a-scene>
 
   <script>
+    // Verifica a visibilidade do marcador
     var marker = document.querySelector('a-marker');
     var model = document.getElementById('arduino-model');
-    var markerVisible = false;
-
-    setInterval(function() {
-      if (markerVisible) {
-        model.setAttribute('visible', 'true');
-      } else {
-        // Em vez de esconder imediatamente, esperar alguns segundos
-        setTimeout(function() {
-          if (!markerVisible) {
-            model.setAttribute('visible', 'false');
-          }
-        }, 2000); // 2 segundos de atraso antes de esconder o modelo
-      }
-    }, 100); // Verificar o estado do marcador a cada 100ms
 
     marker.addEventListener('markerFound', function() {
-      markerVisible = true;
+      model.setAttribute('visible', 'true');
     });
 
     marker.addEventListener('markerLost', function() {
-      markerVisible = false;
+      model.setAttribute('visible', 'false');
     });
   </script>
 </body>
