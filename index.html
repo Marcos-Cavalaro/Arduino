@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>AR.js Basic Example with Animation</title>
+  <title>AR.js Example with 3D Model</title>
   <meta charset="utf-8">
   <style>
     body { margin: 0; }
@@ -15,19 +15,34 @@
 
   <!-- Define a cena AR -->
   <a-scene embedded arjs>
-    <!-- Define um marcador Hiro -->
-    <a-marker preset="hiro">
-      <!-- Modelo 3D com animação de rotação -->
+    <!-- Define um marcador Hiro com emissão de eventos -->
+    <a-marker preset="hiro" emitevents="true">
+      <!-- Modelo 3D com tamanho menor e rotação suave -->
       <a-entity 
         id="arduino-model"
         gltf-model="url(arduino_uno.glb)" 
-        scale="1.75 1.75 1.75" 
-        position="0 0 0"
+        scale="1.5 1.5 1.5" 
+        position="0 0 0" 
+        rotation="0 0 0"
         animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear">
       </a-entity>
     </a-marker>
     <!-- Define a câmera -->
     <a-entity camera></a-entity>
   </a-scene>
+
+  <script>
+    // Manipuladores de eventos para manter o modelo visível mesmo quando o marcador é perdido
+    var marker = document.querySelector('a-marker');
+    var model = document.getElementById('arduino-model');
+
+    marker.addEventListener('markerLost', function() {
+      model.setAttribute('visible', 'false');
+    });
+
+    marker.addEventListener('markerFound', function() {
+      model.setAttribute('visible', 'true');
+    });
+  </script>
 </body>
 </html>
