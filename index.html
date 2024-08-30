@@ -17,9 +17,14 @@
   <a-scene embedded arjs>
     <!-- Define um marcador Hiro -->
     <a-marker preset="hiro">
-      <!-- Substitui o bloco vermelho pelo modelo 3D -->
-      <a-entity gltf-model="url(arduino_uno.glb)" scale="1 1 1" position="0 0 0" rotation="0 0 0"></a-entity>
-
+      <!-- Modelo 3D com tamanho menor e rotação suave -->
+      <a-entity 
+        gltf-model="url(arduino_uno.glb)" 
+        scale="0.5 0.5 0.5" 
+        position="0 0 0" 
+        rotation="0 0 0"
+        animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+      </a-entity>
     </a-marker>
     <!-- Define a câmera -->
     <a-entity camera></a-entity>
