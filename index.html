@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>AR.js Example with 3D Model</title>
+  <title>AR.js Basic Example with Animation and Visibility Control</title>
   <meta charset="utf-8">
   <style>
     body { margin: 0; }
@@ -17,13 +17,13 @@
   <a-scene embedded arjs>
     <!-- Define um marcador Hiro -->
     <a-marker preset="hiro">
-      <!-- Modelo 3D com tamanho ajustado -->
+      <!-- Modelo 3D com animação de rotação -->
       <a-entity 
         id="arduino-model"
-        gltf-model="url(arduino_uno.glb)" 
-        scale="2.5 2.5 2.5" 
-        position="0 0 0" 
-        rotation="0 0 0">
+        gltf-model="url(https://aframe.io/examples/ai/assets/robot/robot.glb)" 
+        scale="1.75 1.75 1.75" 
+        position="0 0 0"
+        animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear">
       </a-entity>
     </a-marker>
     <!-- Define a câmera -->
@@ -31,16 +31,29 @@
   </a-scene>
 
   <script>
-    // Verifica a visibilidade do marcador
     var marker = document.querySelector('a-marker');
     var model = document.getElementById('arduino-model');
+    var markerVisible = false;
+    var visibilityTimeout;
+
+    // Função para manter o modelo visível por um período após a perda do marcador
+    function keepModelVisible() {
+      clearTimeout(visibilityTimeout); // Limpa o timeout anterior
+      model.setAttribute('visible', 'true'); // Torna o modelo visível
+      visibilityTimeout = setTimeout(function() {
+        model.setAttribute('visible', 'false'); // Esconde o modelo após o tempo
+      }, 2000); // 2 segundos de atraso
+    }
 
     marker.addEventListener('markerFound', function() {
+      markerVisible = true;
       model.setAttribute('visible', 'true');
+      clearTimeout(visibilityTimeout); // Limpa qualquer timeout de visibilidade quando o marcador é encontrado
     });
 
     marker.addEventListener('markerLost', function() {
-      model.setAttribute('visible', 'false');
+      markerVisible = false;
+      keepModelVisible(); // Chama a função para manter o modelo visível
     });
   </script>
 </body>
