@@ -21,7 +21,7 @@
       <a-entity 
         id="arduino-model"
         gltf-model="url(arduino_uno.glb)" 
-        scale="1.5 1.5 1.5" 
+        scale="0.5 0.5 0.5" 
         position="0 0 0" 
         rotation="0 0 0"
         animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear">
@@ -35,13 +35,17 @@
     // Manipuladores de eventos para manter o modelo visível mesmo quando o marcador é perdido
     var marker = document.querySelector('a-marker');
     var model = document.getElementById('arduino-model');
-
-    marker.addEventListener('markerLost', function() {
-      model.setAttribute('visible', 'false');
-    });
+    var visibilityTimeout;
 
     marker.addEventListener('markerFound', function() {
+      clearTimeout(visibilityTimeout); // Limpa o timeout para garantir que o modelo fique visível
       model.setAttribute('visible', 'true');
+    });
+
+    marker.addEventListener('markerLost', function() {
+      visibilityTimeout = setTimeout(function() {
+        model.setAttribute('visible', 'false');
+      }, 1500); // Mantém o modelo visível por 1,5 segundos após perder o marcador
     });
   </script>
 </body>
